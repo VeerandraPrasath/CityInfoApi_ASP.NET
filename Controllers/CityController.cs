@@ -9,11 +9,13 @@ namespace CityInfoApi.Controllers
         [HttpGet()]
         public JsonResult GetCities()
         {
-            return new JsonResult(new List<object>
-            {
-                new {id=1,name="Prasath"},
-                new {id=2,name="Arun"}
-            });
+            return new JsonResult(CityDataSource.Current.Cities);
+        }
+
+        [HttpGet("{id}")]
+        public JsonResult GetCity(int id)
+        {
+           return new JsonResult(CityDataSource.Current.Cities.FirstOrDefault(c => c.Id == id));
         }
 
     }
