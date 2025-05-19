@@ -17,23 +17,30 @@ namespace CityInfoApi
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    app.UseSwagger();
-            //    app.UseSwaggerUI();
-            //}
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+            app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
 
             //app.MapControllers();
-
-            app.Run(async context =>
+            app.UseEndpoints(endPoints =>
             {
-                await context.Response.WriteAsync("Hello World!");
-            });
+                endPoints.MapControllers();
+            }
+            );
+
+            //app.Run(async context =>
+            //{
+            //    await context.Response.WriteAsync("Hello World!");
+            //});
+
             app.Run();
         }
     }
