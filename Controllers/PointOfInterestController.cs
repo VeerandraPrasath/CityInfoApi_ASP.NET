@@ -18,17 +18,29 @@ namespace CityInfoApi.Controllers
         [HttpGet()]
         public ActionResult<IEnumerable<PointOfInterestDTO>> GetPointOfInterests(int cityId)
         {
-            CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
-            if(city is null)
+            try
             {
-                _logger.LogInformation($"City with id {cityId} was not found when accessing point of interest");
-                return NotFound(); //203 status code
+                //This thorow is for catch the the exception and log the critical info in the console.
+                //throw new Exception("Test Exception for logging critical infos");
+
+                CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
+                if (city is null)
+                {
+                    _logger.LogInformation($"City with id {cityId} was not found when accessing point of interest");
+                    return NotFound(); //203 status code
+                }
+                if (city.PointOfInterestDTOs.Count == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(city.PointOfInterestDTOs);
             }
-            if(city.PointOfInterestDTOs.Count == 0)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogCritical($"Exception while getting point of interest for city with id {cityId}.", ex); //We only mention to log informaton in the Launchsettings.json but the critical things are also logging in the console.
+                return StatusCode(500, "A problem happened while handling your request.");
+
             }
-            return Ok(city.PointOfInterestDTOs);
 
         }
 
