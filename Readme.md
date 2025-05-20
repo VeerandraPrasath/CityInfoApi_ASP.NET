@@ -10,3 +10,10 @@
 ### Data Transfer Object
 * Create DTO model for City
 * Created CityDataSource Class for temporary list of cityDto.
+* Created DTO for PointOfInterest
+* Used ActionResult as return type
+* Created Controllers for city,PointOfInterest and also for File
+* Also set the acceptable formatters like only json and xml. If not response as 406 Not Acceptable status code
+* Implemented File Controller and return a pdf file as response using FileExtensionContentTypeProvider Class .Added this class to  the DI container as singleton so that it will create object only once.
+* This class is used to get the Contenttype which is the file type dynamically.
+---------------------------------------End of Section 3 _________________________________________________________________________________________________
