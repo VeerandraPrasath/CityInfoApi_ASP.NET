@@ -9,4 +9,4 @@
 * Turned off SSL certification check in Postman
 ### Data Transfer Object
 * Create DTO model for City
-* Created CityDataSource Class for temperory list of cityDto
+* Created CityDataSource Class for temporary list of cityDto.
