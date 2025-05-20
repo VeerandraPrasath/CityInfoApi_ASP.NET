@@ -36,5 +36,21 @@ namespace CityInfoApi.Controllers
             return File(FileInBytes,contentType, "Prasath-AutoBiography.pdf");
         }
 
+        [HttpPost()]
+        public async Task<ActionResult> CreateAndStoreFile(IFormFile file) {
+            if (file.Length == 0 || file.Length > 20971520 || file.ContentType!="application/pdf")
+            {
+                return BadRequest("Invalid file has been uploaded");
+            }
+
+            var path=Path.Combine(Directory.GetCurrentDirectory(), $"UploadedFiles_{Guid.NewGuid()}.pdf", file.FileName);
+            using (var stream=new FileStream(path, FileMode.Create))
+            {
+               await file.CopyToAsync(stream);
+            }
+            return Ok($"File has been uploaded successfully to {path}");
+
+        }
+
     }
 }
