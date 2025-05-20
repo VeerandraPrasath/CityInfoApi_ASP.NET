@@ -9,9 +9,12 @@ namespace CityInfoApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Logging.ClearProviders(); //Clear the default logging providers which is given in the appsettings.json file
+            builder.Logging.AddConsole(); //Add console logging provider
+
+
             // Add services to the container
             //builder.Services.AddControllers();
-
             builder.Services.AddControllers(options =>
             {
                 options.ReturnHttpNotAcceptable = true; //If the client does not accept the response type, return 406 Not Acceptable.If will not accept the request of the client because the response type will not support the client.

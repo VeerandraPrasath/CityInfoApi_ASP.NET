@@ -9,12 +9,19 @@ namespace CityInfoApi.Controllers
     [Route("api/cities/{cityId}/pointsofinterest")]
     public class PointOfInterestController:ControllerBase
     {
+        ILogger<PointOfInterestController> _logger;
+
+        public PointOfInterestController(ILogger<PointOfInterestController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet()]
         public ActionResult<IEnumerable<PointOfInterestDTO>> GetPointOfInterests(int cityId)
         {
             CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
             if(city is null)
             {
+                _logger.LogInformation($"City with id {cityId} was not found when accessing point of interest");
                 return NotFound(); //203 status code
             }
             if(city.PointOfInterestDTOs.Count == 0)
