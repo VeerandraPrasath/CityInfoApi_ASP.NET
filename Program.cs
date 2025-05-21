@@ -1,5 +1,5 @@
-
 using Microsoft.AspNetCore.StaticFiles;
+using Serilog;
 
 namespace CityInfoApi
 {
@@ -7,11 +7,23 @@ namespace CityInfoApi
     {
         public static void Main(string[] args)
         {
+            //For this 2 packages are required install-package serilog.sinks.file and install-package serilog.sinks.console
+            Log.Logger=new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("logs/cityInfoApiLog.txt", rollingInterval: RollingInterval.Day)
+                .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
+                .CreateLogger();
+
+
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Logging.ClearProviders(); //Clear the default logging providers which is given in the appsettings.json file
-            builder.Logging.AddConsole(); //Add console logging provider
+            //builder.Logging.ClearProviders(); //Clear the default logging providers which is given in the appsettings.json file
+            //builder.Logging.AddConsole(); //Add console logging provider
 
+
+            //Add serilog to the builder.Before adding this configure the serilog in the top of the file [line 11-16] also comment the default logging provider [lin 21,22].
+            builder.Host.UseSerilog();
 
             // Add services to the container
             //builder.Services.AddControllers();
