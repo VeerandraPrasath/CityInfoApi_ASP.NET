@@ -18,6 +18,6 @@ namespace CityInfoApi.Entity
         public string Description { get; set; }
 
 
-        public ICollection<PointOfInterestEntity> PointOfInterestEntities { get; set; } = new List<PointOfInterestEntity>();//Also act as Navigational Property
+        public ICollection<PointOfInterestEntity> PointOfInterests { get; set; } = new List<PointOfInterestEntity>();//Also act as Navigational Property
     }
 }

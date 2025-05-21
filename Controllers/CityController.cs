@@ -48,12 +48,20 @@ namespace CityInfoApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetCity(int id)
+        public async Task<ActionResult> GetCity(int id, bool includePointOfInterest = false)
         {
-            CityEntity city= await  _databaseRepository.GetCityAsync(id);
-            if(city is null)
+          
+            if(!await _databaseRepository.CityExitAsync(id))
             {
                 return NotFound();
+
+            }
+            CityEntity city= await  _databaseRepository.GetCityAsync(id,includePointOfInterest);
+
+            if (includePointOfInterest)
+            {
+                CityDTO cityToReturn=_mapper.Map<CityDTO>(city);
+                return Ok(cityToReturn);
             }
             //CityDTO cityToReturn = new CityDTO
             //{

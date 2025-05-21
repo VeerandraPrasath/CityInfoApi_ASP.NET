@@ -19,7 +19,7 @@ namespace CityInfoApi
                 Id=1,
                 Name="Madurai",
                 Description="Madurai is famous for everything",
-                PointOfInterestDTOs = new List<PointOfInterestDTO>{
+                PointOfInterests = new List<PointOfInterestDTO>{
                 new PointOfInterestDTO
                 {
                     Id=1,
@@ -39,7 +39,7 @@ namespace CityInfoApi
                 Id=2,
                 Name="Coimbatore",
                 Description="Coimbatore is famous for Slang",
-                PointOfInterestDTOs = new List<PointOfInterestDTO>{
+                PointOfInterests = new List<PointOfInterestDTO>{
                     new PointOfInterestDTO
                     {
                         Id=1,
@@ -59,7 +59,7 @@ namespace CityInfoApi
                 Id=3,
                 Name="Theni",
                 Description="Theni is a place of nature",
-                PointOfInterestDTOs = new List<PointOfInterestDTO>{
+                PointOfInterests = new List<PointOfInterestDTO>{
                     new PointOfInterestDTO
                     {
                         Id=1,

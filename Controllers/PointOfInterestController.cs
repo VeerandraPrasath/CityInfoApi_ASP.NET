@@ -34,11 +34,11 @@ namespace CityInfoApi.Controllers
                     //_logger.LogInformation($"City with id {cityId} was not found when accessing point of interest");-->commented because we are using serilogger.
                     return NotFound(); //203 status code
                 }
-                if (city.PointOfInterestDTOs.Count == 0)
+                if (city.PointOfInterests.Count == 0)
                 {
                     return NotFound();
                 }
-                return Ok(city.PointOfInterestDTOs);
+                return Ok(city.PointOfInterests);
             }
             catch (Exception ex)
             {
@@ -57,11 +57,11 @@ namespace CityInfoApi.Controllers
             {
                 return NotFound(); //203 status code
             }
-            if (city.PointOfInterestDTOs.Count == 0)
+            if (city.PointOfInterests.Count == 0)
             {
                 return NotFound();
             }
-            PointOfInterestDTO pointOfInterest = city.PointOfInterestDTOs.Where(poi => poi.Id == poiId).FirstOrDefault();
+            PointOfInterestDTO pointOfInterest = city.PointOfInterests.Where(poi => poi.Id == poiId).FirstOrDefault();
             if (pointOfInterest is null)
             {
                 return NotFound();
@@ -78,14 +78,14 @@ namespace CityInfoApi.Controllers
                 return NotFound(); //203 status code
             }
 
-            int max = city.PointOfInterestDTOs.Max(poi=>poi.Id);
+            int max = city.PointOfInterests.Max(poi=>poi.Id);
             PointOfInterestDTO NewpointOfInterest = new PointOfInterestDTO()
             {
                 Id = ++max,
                 Name = creationPointOfInterestDTO.Name,
                 Description = creationPointOfInterestDTO.Description
             };
-            city.PointOfInterestDTOs.Add(NewpointOfInterest);
+            city.PointOfInterests.Add(NewpointOfInterest);
             return CreatedAtRoute("GetPointOfInterest",new
             {
                 cityId=cityId,
@@ -103,11 +103,11 @@ namespace CityInfoApi.Controllers
             {
                 return NotFound(); //203 status code
             }
-            if (city.PointOfInterestDTOs.Count == 0)
+            if (city.PointOfInterests.Count == 0)
             {
                 return NotFound();
             }
-            PointOfInterestDTO pointOfInterest = city.PointOfInterestDTOs.Where(poi => poi.Id == poiId).FirstOrDefault();
+            PointOfInterestDTO pointOfInterest = city.PointOfInterests.Where(poi => poi.Id == poiId).FirstOrDefault();
             if (pointOfInterest is null)
             {
                 return NotFound();
@@ -126,11 +126,11 @@ namespace CityInfoApi.Controllers
             {
                 return NotFound(); //203 status code
             }
-            if (city.PointOfInterestDTOs.Count == 0)
+            if (city.PointOfInterests.Count == 0)
             {
                 return NotFound();
             }
-            PointOfInterestDTO pointOfInterestFromDb = city.PointOfInterestDTOs.Where(poi => poi.Id == poiId).FirstOrDefault();
+            PointOfInterestDTO pointOfInterestFromDb = city.PointOfInterests.Where(poi => poi.Id == poiId).FirstOrDefault();
             if (pointOfInterestFromDb is null)
             {
                 return NotFound();
@@ -164,16 +164,16 @@ namespace CityInfoApi.Controllers
             {
                 return NotFound(); //203 status code
             }
-            if (city.PointOfInterestDTOs.Count == 0)
+            if (city.PointOfInterests.Count == 0)
             {
                 return NotFound();
             }
-            PointOfInterestDTO pointOfInterest = city.PointOfInterestDTOs.Where(poi => poi.Id == poiId).FirstOrDefault();
+            PointOfInterestDTO pointOfInterest = city.PointOfInterests.Where(poi => poi.Id == poiId).FirstOrDefault();
             if (pointOfInterest is null)
             {
                 return NotFound();
             }
-            city.PointOfInterestDTOs.Remove(pointOfInterest);
+            city.PointOfInterests.Remove(pointOfInterest);
             _mailservice.SendMail($"PointOfInterest with id {poiId} deleted successfully !");
             return NoContent();
         }

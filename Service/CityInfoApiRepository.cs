@@ -1,5 +1,6 @@
 ﻿using CityInfoApi.DbContexts;
 using CityInfoApi.Entity;
+using CityInfoApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityInfoApi.Service
@@ -11,13 +12,25 @@ namespace CityInfoApi.Service
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+
+        public async Task<bool> CityExitAsync(int cityId)
+        {
+           return await _context.Cities.AnyAsync(city => city.Id == cityId);
+        }
+
         public async Task<IEnumerable<CityEntity>> GetCitiesAsync()
         {
             return await _context.Cities.OrderBy(c => c.Name).ToListAsync();
         }
 
-        public async Task<CityEntity> GetCityAsync(int cityId)
+        public async Task<CityEntity> GetCityAsync(int cityId, bool includePointOfInterest)
         {
+            if(includePointOfInterest)
+            {
+                CityEntity city= await _context.Cities.Include(c => c.PointOfInterests).Where(city => city.Id == cityId).FirstOrDefaultAsync();
+                return city;
+            }
+
             return await _context.Cities.Where(city => city.Id == cityId).FirstOrDefaultAsync();
         }
 

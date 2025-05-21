@@ -7,10 +7,13 @@ namespace CityInfoApi.Service
 
        Task<IEnumerable<CityEntity>> GetCitiesAsync();
 
-       Task<CityEntity> GetCityAsync(int cityId);
+       Task<CityEntity> GetCityAsync(int cityId,bool includePointOfInterest);
 
        Task<IEnumerable<PointOfInterestEntity>> GetPointOfInterestsForCityAsync(int cityId);
 
       Task<PointOfInterestEntity> GetPointOfInterestForCityAsync(int cityId,int pointOfInterestId);
+
+        Task<bool> CityExitAsync(int cityId);
+
     }
 }
