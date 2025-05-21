@@ -1,5 +1,6 @@
 using CityInfoApi.DbContexts;
 using CityInfoApi.MailService;
+using CityInfoApi.Service;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -63,10 +64,15 @@ namespace CityInfoApi
             builder.Services.AddDbContext<CityInfoApiContext>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:connectString"]));
 
             #if DEBUG
-            builder.Services.AddScoped<IMailService, LocalMailService>(); //This is for the local mail service             
+            builder.Services.AddScoped<IMailService, LocalMailService>(); //This is for the local mail  service             
             #else
             builder.Services.AddScoped<IMailService, CloudMailService>(); //This is for the cloud mail service
             #endif
+
+            builder.Services.AddScoped<ICityInfoApiRepository, CityInfoApiRepository>();
+
+            //Install Automapper.extensions.microsoft.dependencyinjection
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var app = builder.Build();
 
