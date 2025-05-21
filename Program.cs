@@ -1,3 +1,4 @@
+using CityInfoApi.MailService;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 
@@ -53,6 +54,14 @@ namespace CityInfoApi
 
             //To get file type dynamically we use this class
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
+
+            builder.Services.AddSingleton<CityDataSource>();
+
+            #if DEBUG
+            builder.Services.AddScoped<IMailService, LocalMailService>(); //This is for the local mail service             
+            #else
+            builder.Services.AddScoped<IMailService, CloudMailService>(); //This is for the cloud mail service
+            #endif
 
             var app = builder.Build();
 

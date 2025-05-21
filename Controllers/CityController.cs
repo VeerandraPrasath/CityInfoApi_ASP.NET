@@ -7,7 +7,11 @@ namespace CityInfoApi.Controllers
     [Route("api/cities")]
     public class CityController:ControllerBase
     {
-        
+        private CityDataSource _dataSource;
+        public CityController(CityDataSource dataSource)
+        {
+            _dataSource = dataSource;   
+        }
 
         [HttpGet()]
         public ActionResult<IEnumerable<CityDTO>> GetCities()
@@ -18,7 +22,7 @@ namespace CityInfoApi.Controllers
         [HttpGet("{id}")]
         public ActionResult GetCity(int id)
         {
-            CityDTO city= CityDataSource.Current.Cities.FirstOrDefault(c => c.Id == id);
+            CityDTO city=   _dataSource.Cities.FirstOrDefault(c => c.Id == id);
             if(city is null)
             {
                 return NotFound();

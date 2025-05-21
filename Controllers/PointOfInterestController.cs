@@ -1,4 +1,5 @@
-﻿using CityInfoApi.Models;
+﻿using CityInfoApi.MailService;
+using CityInfoApi.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,15 @@ namespace CityInfoApi.Controllers
     [Route("api/cities/{cityId}/pointsofinterest")]
     public class PointOfInterestController:ControllerBase
     {
-        ILogger<PointOfInterestController> _logger;
+        //ILogger<PointOfInterestController> _logger;
+        private CityDataSource _dataSource;
+        private IMailService _mailservice;
 
-        public PointOfInterestController(ILogger<PointOfInterestController> logger)
+        public PointOfInterestController(CityDataSource dataSource,IMailService mailService)
         {
-            _logger = logger;
+            _dataSource = dataSource;
+            _mailservice = mailService;
+            //_logger = logger;
         }
         [HttpGet()]
         public ActionResult<IEnumerable<PointOfInterestDTO>> GetPointOfInterests(int cityId)
@@ -23,10 +28,10 @@ namespace CityInfoApi.Controllers
                 //This thorow is for catch the the exception and log the critical info in the console.
                 //throw new Exception("Test Exception for logging critical infos");
 
-                CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
+                CityDTO city = _dataSource.Cities.Where(city => city.Id == cityId).FirstOrDefault();
                 if (city is null)
                 {
-                    _logger.LogInformation($"City with id {cityId} was not found when accessing point of interest");
+                    //_logger.LogInformation($"City with id {cityId} was not found when accessing point of interest");-->commented because we are using serilogger.
                     return NotFound(); //203 status code
                 }
                 if (city.PointOfInterestDTOs.Count == 0)
@@ -37,7 +42,7 @@ namespace CityInfoApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Exception while getting point of interest for city with id {cityId}.", ex); //We only mention to log informaton in the Launchsettings.json but the critical things are also logging in the console.
+                //_logger.LogCritical($"Exception while getting point of interest for city with id {cityId}.", ex); //We only mention to log informaton in the Launchsettings.json but the critical things are also logging in the console.
                 return StatusCode(500, "A problem happened while handling your request.");
 
             }
@@ -47,7 +52,7 @@ namespace CityInfoApi.Controllers
         [HttpGet("{poiId}",Name ="GetPointOfInterest")]
         public ActionResult<PointOfInterestDTO> GetPointOfInterest(int cityId, int poiId)
         {
-            CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
+            CityDTO city = _dataSource.Cities.Where(city => city.Id == cityId).FirstOrDefault();
             if (city is null)
             {
                 return NotFound(); //203 status code
@@ -67,7 +72,7 @@ namespace CityInfoApi.Controllers
         [HttpPost()]
         public ActionResult CreatePointOfInterest(int cityId, CreationPointOfInterestDTO creationPointOfInterestDTO)
         {
-            CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
+            CityDTO city = _dataSource.Cities.Where(city => city.Id == cityId).FirstOrDefault();
             if(city is null)
             {
                 return NotFound(); //203 status code
@@ -93,7 +98,7 @@ namespace CityInfoApi.Controllers
         [HttpPut("{poiId}")]
         public ActionResult PutUpdateOnPointOfInterest(int cityId, int poiId,UpdatePointOfInterestDTO updatePointOfInterest) {
 
-            CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
+            CityDTO city = _dataSource.Cities.Where(city => city.Id == cityId).FirstOrDefault();
             if (city is null)
             {
                 return NotFound(); //203 status code
@@ -150,10 +155,11 @@ namespace CityInfoApi.Controllers
 
             return NoContent();
         }
+
         [HttpDelete("{poiId}")]
         public ActionResult DeletePointOfInterest(int cityId, int poiId)
         {
-            CityDTO city = CityDataSource.Current.Cities.Where(city => city.Id == cityId).FirstOrDefault();
+            CityDTO city = _dataSource.Cities.Where(city => city.Id == cityId).FirstOrDefault();
             if (city is null)
             {
                 return NotFound(); //203 status code
@@ -168,6 +174,7 @@ namespace CityInfoApi.Controllers
                 return NotFound();
             }
             city.PointOfInterestDTOs.Remove(pointOfInterest);
+            _mailservice.SendMail($"PointOfInterest with id {poiId} deleted successfully !");
             return NoContent();
         }
 
