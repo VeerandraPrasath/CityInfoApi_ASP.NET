@@ -1,5 +1,7 @@
+using CityInfoApi.DbContexts;
 using CityInfoApi.MailService;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace CityInfoApi
@@ -56,6 +58,9 @@ namespace CityInfoApi
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
             builder.Services.AddSingleton<CityDataSource>();
+
+            ///Install install-package microsoft.entityframeworkcore.To work with MySqli install Microsoft.EntityFrameworkCore.Sqlite
+            builder.Services.AddDbContext<CityInfoApiContext>(dbContextOptions => dbContextOptions.UseSqlite("Data Source=CityInfoApi.db"));
 
             #if DEBUG
             builder.Services.AddScoped<IMailService, LocalMailService>(); //This is for the local mail service             
