@@ -59,8 +59,8 @@ namespace CityInfoApi
 
             builder.Services.AddSingleton<CityDataSource>();
 
-            ///Install install-package microsoft.entityframeworkcore.To work with MySqli install Microsoft.EntityFrameworkCore.Sqlite
-            builder.Services.AddDbContext<CityInfoApiContext>(dbContextOptions => dbContextOptions.UseSqlite("Data Source=CityInfoApi.db"));
+            ///Install install-package microsoft.entityframeworkcore.To work with MySqli install Microsoft.EntityFrameworkCore.Sqlite and install  microsoft.entityframeworkcore.Tools for Migration commands
+            builder.Services.AddDbContext<CityInfoApiContext>(dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:connectString"]));
 
             #if DEBUG
             builder.Services.AddScoped<IMailService, LocalMailService>(); //This is for the local mail service             
