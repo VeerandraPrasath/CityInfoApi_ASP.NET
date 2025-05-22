@@ -48,7 +48,7 @@ namespace CityInfoApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetCity(int id, bool includePointOfInterest = false)
+        public async Task<IActionResult> GetCity(int id, bool includePointOfInterest = false)
         {
           
             if(!await _databaseRepository.CityExitAsync(id))

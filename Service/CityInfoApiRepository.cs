@@ -13,6 +13,16 @@ namespace CityInfoApi.Service
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public async Task AddPointOfInterestForCityAsync(int cityId, PointOfInterestEntity pointOfInterest)
+        {
+            CityEntity city = await GetCityAsync(cityId, false);
+            if (city != null)
+            {
+                //pointOfInterest.CityId = cityId;
+                city.PointOfInterests.Add(pointOfInterest);
+            }
+        }
+
         public async Task<bool> CityExitAsync(int cityId)
         {
            return await _context.Cities.AnyAsync(city => city.Id == cityId);
@@ -42,6 +52,11 @@ namespace CityInfoApi.Service
         public async Task<IEnumerable<PointOfInterestEntity>> GetPointOfInterestsForCityAsync(int cityId)
         {
             return await _context.PointOfInterests.Where(poi => poi.CityId == cityId).ToListAsync();
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+            return await _context.SaveChangesAsync() >= 0;
         }
     }
 }
